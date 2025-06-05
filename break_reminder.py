@@ -83,7 +83,7 @@ class BreakReminder(QtWidgets.QWidget):
         debug_lines = []
         # If workday is over
         if now >= self.workday_end:
-            label = "Workday complete! 1"
+            label = random.choice(self.FINNISH_FUNNY_MESSAGES)
             if self.debug_enabled:
                 debug_lines.append(f"Now: {now.strftime('%Y-%m-%d %H:%M:%S')}")
                 debug_lines.append(f"Workday end: {self.workday_end.strftime('%Y-%m-%d %H:%M:%S')}")
@@ -114,7 +114,7 @@ class BreakReminder(QtWidgets.QWidget):
                 mins_left = int((next_break - now).total_seconds() // 60)
                 label = f"Next break: {next_break.strftime('%H:%M')} ({mins_left} min left)"
             else:
-                label = random.choice(self.FINNISH_FUNNY_MESSAGES)
+                label = "No more breaks today!"
             if self.debug_enabled:
                 debug_lines.append(f"Now: {now.strftime('%Y-%m-%d %H:%M:%S')}")
                 debug_lines.append(f"Start: {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}")
