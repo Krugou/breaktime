@@ -132,3 +132,4 @@ dist
 build/*
 dist/*
 *.spec
+break_reminder_config.json
