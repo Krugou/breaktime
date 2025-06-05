@@ -114,7 +114,9 @@ class BreakReminder(QtWidgets.QWidget):
                 mins_left = int((next_break - now).total_seconds() // 60)
                 label = f"Next break: {next_break.strftime('%H:%M')} ({mins_left} min left)"
             else:
-                label = "No more breaks today!"
+                # add time until workday end
+                mins_left = int((self.workday_end - now).total_seconds() // 60)
+                label = f"No more breaks today! ({mins_left} min left)"
             if self.debug_enabled:
                 debug_lines.append(f"Now: {now.strftime('%Y-%m-%d %H:%M:%S')}")
                 debug_lines.append(f"Start: {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}")
