@@ -336,7 +336,6 @@ class BreakReminder(QtWidgets.QWidget):
 
 
 
-
 # Config file for storing usual start, lunch times, and workday length
 CONFIG_FILE = os.path.join(os.path.expanduser("~"), ".break_reminder_config.json")
 
@@ -366,7 +365,7 @@ def get_times_dialog():
     config = load_config()
     dialog = QtWidgets.QDialog()
     dialog.setWindowTitle("⚙️ Configure Work Schedule")
-    dialog.setFixedSize(400, 280)
+    dialog.setFixedSize(450, 320)  # Increased size
     dialog.setStyleSheet("""
         QDialog {
             background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
@@ -382,10 +381,11 @@ def get_times_dialog():
         QLineEdit {
             border: 2px solid #dee2e6;
             border-radius: 6px;
-            padding: 8px 12px;
-            font-size: 14px;
+            padding: 12px 16px;  # Increased padding
+            font-size: 16px;     # Increased font size
             background: white;
             selection-background-color: #007bff;
+            min-height: 20px;    # Added minimum height
         }
         QLineEdit:focus {
             border-color: #007bff;
@@ -420,18 +420,18 @@ def get_times_dialog():
     """)
 
     layout = QtWidgets.QVBoxLayout(dialog)
-    layout.setSpacing(16)
-    layout.setContentsMargins(24, 24, 24, 24)
+    layout.setSpacing(20)  # Increased spacing
+    layout.setContentsMargins(30, 30, 30, 30)  # Increased margins
 
     # Title
     title = QtWidgets.QLabel("Configure your work schedule")
-    title.setStyleSheet("font-size: 18px; font-weight: bold; color: #212529; margin-bottom: 8px;")
+    title.setStyleSheet("font-size: 18px; font-weight: bold; color: #212529; margin-bottom: 12px;")
     layout.addWidget(title)
 
     # Form layout
     form_layout = QtWidgets.QFormLayout()
-    form_layout.setSpacing(12)
-    form_layout.setVerticalSpacing(8)
+    form_layout.setSpacing(16)  # Increased spacing
+    form_layout.setVerticalSpacing(12)  # Increased vertical spacing
 
     start_edit = QtWidgets.QLineEdit(config["usual_start"])
     start_edit.setPlaceholderText("e.g., 08:00")
