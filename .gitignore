@@ -1,3 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Configuration (user-specific)
+.break_reminder_config.json
+break_reminder_config.json
+
+# Build artifacts
+install.bat
+BreakReminder.exe
+
+# Legacy gitignore content (Node.js - keeping for compatibility)
 # Logs
 logs
 *.log
@@ -128,8 +180,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-build/*
-dist/*
-*.spec
-break_reminder_config.json

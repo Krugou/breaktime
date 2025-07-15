@@ -1,8 +1,26 @@
 @echo off
-REM Launch the break reminder Python script
+REM Enhanced Break Reminder Launch Script
 cd /d "%~dp0"
 
-echo Good morning! Remember: coffee is just a hug in a mug. Let's make today so productive that even our to-do list gets scared!
+echo ===============================================
+echo   Break Reminder - Enhanced Edition
+echo ===============================================
+echo.
+echo Features:
+echo  * Modern dark/light themes
+echo  * System tray integration
+echo  * Configurable settings
+echo  * Smooth animations
+echo  * Draggable interface
+echo.
+echo Starting Break Reminder...
+echo.
 
+python break_reminder_enhanced.py
 
-python break_reminder.py
+REM If Python execution fails, try the legacy version
+if %errorlevel% neq 0 (
+    echo.
+    echo Enhanced version failed, trying legacy version...
+    python break_reminder.py
+)
