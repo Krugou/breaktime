@@ -113,6 +113,8 @@ class BreakReminderWidget(QWidget):
         self.create_layout()
         
         # Window setup
+        self.setMinimumSize(320, 100)
+        self.setMaximumSize(480, 200)
         self.resize(340, 120)
         self.position_window()
         self.add_drop_shadow()
@@ -131,10 +133,13 @@ class BreakReminderWidget(QWidget):
         self.main_label.setStyleSheet(self.style_manager.get_style("main_label"))
         self.main_label.setWordWrap(True)
         self.main_label.setAlignment(Qt.AlignCenter)
+        self.main_label.setMinimumHeight(40)
+        self.main_label.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
         
         # Title label
         self.title_label = QLabel("Break Reminder")
         self.title_label.setStyleSheet(self.style_manager.get_style("title_label"))
+        self.title_label.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
     
     def create_buttons(self):
         """Create control buttons."""
@@ -171,11 +176,11 @@ class BreakReminderWidget(QWidget):
         # Container layout
         container_layout = QVBoxLayout()
         container_layout.setContentsMargins(0, 0, 0, 0)
-        container_layout.setSpacing(0)
+        container_layout.setSpacing(4)
         
         # Header layout
         header_layout = QHBoxLayout()
-        header_layout.setContentsMargins(16, 12, 16, 0)
+        header_layout.setContentsMargins(16, 12, 16, 8)
         header_layout.setSpacing(8)
         
         # Status section
@@ -260,11 +265,32 @@ class BreakReminderWidget(QWidget):
         color = self.style_manager.get_status_color(state.value)
         self.status_indicator.update_status(state, color)
         
+        # Adjust window size based on content
+        self.adjust_window_size()
+        
         # Handle workday completion
         if state == BreakState.DONE and not self.close_timer_started:
             self.close_timer_started = True
             auto_close_delay = self.config_manager.get("auto_close_delay", 30)
             QTimer.singleShot(auto_close_delay * 60 * 1000, self.close)
+    
+    def adjust_window_size(self):
+        """Dynamically adjust window size based on content."""
+        # Get the preferred size for the main label
+        fm = self.main_label.fontMetrics()
+        text_rect = fm.boundingRect(
+            0, 0, 400, 200,  # Maximum width and height
+            Qt.TextWordWrap | Qt.AlignCenter,
+            self.main_label.text()
+        )
+        
+        # Calculate required height based on text
+        required_height = max(100, text_rect.height() + 80)  # 80px for header and margins
+        required_height = min(required_height, 200)  # Don't exceed maximum
+        
+        # Resize if needed
+        if self.height() != required_height:
+            self.resize(self.width(), required_height)
     
     def toggle_debug(self, checked):
         """Toggle debug mode display.

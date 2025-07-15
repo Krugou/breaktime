@@ -48,7 +48,6 @@ class StyleManager:
                         stop:1 rgba(25, 25, 35, 240));
                     border-radius: 15px;
                     border: 2px solid rgba(100, 100, 120, 80);
-                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
                 }
             """,
             "main_window_hover": """
@@ -58,7 +57,6 @@ class StyleManager:
                         stop:1 rgba(35, 35, 45, 250));
                     border-radius: 15px;
                     border: 2px solid rgba(120, 120, 140, 120);
-                    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
                 }
             """,
             "main_label": """
@@ -70,7 +68,6 @@ class StyleManager:
                     padding: 16px 20px;
                     background: transparent;
                     border: none;
-                    line-height: 1.5;
                 }
             """,
             "title_label": """
@@ -81,7 +78,6 @@ class StyleManager:
                     font-family: 'Segoe UI', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
                     background: transparent;
                     border: none;
-                    letter-spacing: 0.5px;
                 }
             """,
             "button_base": """
@@ -92,13 +88,6 @@ class StyleManager:
                     font-size: 14px;
                     font-family: 'Segoe UI', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
                     padding: 8px 16px;
-                    transition: all 0.2s ease;
-                }
-                QPushButton:hover {
-                    transform: translateY(-1px);
-                }
-                QPushButton:pressed {
-                    transform: translateY(0px);
                 }
             """,
             "debug_button": """
@@ -261,7 +250,6 @@ class StyleManager:
                         stop:1 rgba(248, 249, 250, 240));
                     border-radius: 15px;
                     border: 2px solid rgba(200, 200, 210, 120);
-                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
                 }
             """,
             "main_window_hover": """
@@ -271,7 +259,6 @@ class StyleManager:
                         stop:1 rgba(248, 249, 250, 250));
                     border-radius: 15px;
                     border: 2px solid rgba(180, 180, 190, 150);
-                    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
                 }
             """,
             "main_label": """
@@ -283,7 +270,6 @@ class StyleManager:
                     padding: 16px 20px;
                     background: transparent;
                     border: none;
-                    line-height: 1.5;
                 }
             """,
             "title_label": """
@@ -294,7 +280,6 @@ class StyleManager:
                     font-family: 'Segoe UI', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
                     background: transparent;
                     border: none;
-                    letter-spacing: 0.5px;
                 }
             """,
             "button_base": """
@@ -305,13 +290,6 @@ class StyleManager:
                     font-size: 14px;
                     font-family: 'Segoe UI', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
                     padding: 8px 16px;
-                    transition: all 0.2s ease;
-                }
-                QPushButton:hover {
-                    transform: translateY(-1px);
-                }
-                QPushButton:pressed {
-                    transform: translateY(0px);
                 }
             """,
             "debug_button": """
