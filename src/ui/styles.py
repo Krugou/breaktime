@@ -228,6 +228,46 @@ class StyleManager:
                     background: #2a4d8d;
                 }
             """,
+            "progress_bar": """
+                QProgressBar {
+                    border: none;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 8px;
+                    height: 16px;
+                    text-align: center;
+                    font-size: 11px;
+                    font-weight: 600;
+                    font-family: 'Segoe UI', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+                    color: rgba(255, 255, 255, 0.8);
+                }
+                QProgressBar::chunk {
+                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 rgba(16, 185, 129, 200),
+                        stop:1 rgba(5, 150, 105, 200));
+                    border-radius: 8px;
+                    border: none;
+                }
+                QProgressBar[breakState="work"]::chunk {
+                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 rgba(16, 185, 129, 200),
+                        stop:1 rgba(5, 150, 105, 200));
+                }
+                QProgressBar[breakState="break"]::chunk {
+                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 rgba(245, 158, 11, 200),
+                        stop:1 rgba(217, 119, 6, 200));
+                }
+                QProgressBar[breakState="lunch"]::chunk {
+                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 rgba(59, 130, 246, 200),
+                        stop:1 rgba(37, 99, 235, 200));
+                }
+                QProgressBar[breakState="done"]::chunk {
+                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 rgba(139, 92, 246, 200),
+                        stop:1 rgba(124, 58, 237, 200));
+                }
+            """,
             "status_colors": {
                 "work": "#10b981",      # Emerald
                 "break": "#f59e0b",     # Amber
@@ -427,6 +467,46 @@ class StyleManager:
                 }
                 QPushButton:pressed {
                     background: #004085;
+                }
+            """,
+            "progress_bar": """
+                QProgressBar {
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                    background: rgba(0, 0, 0, 0.05);
+                    border-radius: 8px;
+                    height: 16px;
+                    text-align: center;
+                    font-size: 11px;
+                    font-weight: 600;
+                    font-family: 'Segoe UI', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+                    color: rgba(0, 0, 0, 0.7);
+                }
+                QProgressBar::chunk {
+                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 rgba(5, 150, 105, 220),
+                        stop:1 rgba(4, 120, 87, 220));
+                    border-radius: 8px;
+                    border: none;
+                }
+                QProgressBar[breakState="work"]::chunk {
+                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 rgba(5, 150, 105, 220),
+                        stop:1 rgba(4, 120, 87, 220));
+                }
+                QProgressBar[breakState="break"]::chunk {
+                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 rgba(217, 119, 6, 220),
+                        stop:1 rgba(180, 83, 9, 220));
+                }
+                QProgressBar[breakState="lunch"]::chunk {
+                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 rgba(37, 99, 235, 220),
+                        stop:1 rgba(29, 78, 216, 220));
+                }
+                QProgressBar[breakState="done"]::chunk {
+                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 rgba(124, 58, 237, 220),
+                        stop:1 rgba(109, 40, 217, 220));
                 }
             """,
             "status_colors": {

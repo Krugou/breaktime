@@ -88,6 +88,7 @@ class BreakLogic:
             - message: Display message
             - time_left: Minutes until next event
             - next_event: Description of next event
+            - progress_percent: Progress percentage (0-100) until next event
             - debug_info: Debug information if enabled
         """
         now = datetime.now()
@@ -98,17 +99,23 @@ class BreakLogic:
             info.update({
                 "message": f"🎉 {random.choice(self.FINNISH_FUNNY_MESSAGES)}",
                 "time_left": 0,
-                "next_event": "Workday complete"
+                "next_event": "Workday complete",
+                "progress_percent": 100
             })
             return BreakState.DONE, info
         
         # Check if in lunch break window
         if self.lunch_start <= now <= self.lunch_end:
             time_left = int((self.lunch_end - now).total_seconds() // 60)
+            total_lunch_time = int((self.lunch_end - self.lunch_start).total_seconds() // 60)
+            elapsed_lunch_time = total_lunch_time - time_left
+            progress_percent = int((elapsed_lunch_time / total_lunch_time) * 100) if total_lunch_time > 0 else 0
+            
             info.update({
                 "message": f"🍽️ Lunch break!\n⏰ {time_left} minutes left",
                 "time_left": time_left,
-                "next_event": "End of lunch break"
+                "next_event": "End of lunch break",
+                "progress_percent": progress_percent
             })
             return BreakState.LUNCH, info
         
@@ -120,19 +127,34 @@ class BreakLogic:
             next_break = self.break_times[self.next_break_idx]
             time_left = int((next_break - now).total_seconds() // 60)
             
+            # Calculate progress based on time segment
+            if self.next_break_idx == 0:
+                # Progress from start to first break
+                segment_start = self.start_time
+            else:
+                # Progress from previous break to next break
+                segment_start = self.break_times[self.next_break_idx - 1]
+            
+            total_segment_time = int((next_break - segment_start).total_seconds() // 60)
+            elapsed_segment_time = int((now - segment_start).total_seconds() // 60)
+            progress_percent = int((elapsed_segment_time / total_segment_time) * 100) if total_segment_time > 0 else 0
+            progress_percent = max(0, min(100, progress_percent))  # Clamp to 0-100
+            
             # Check if we're at break time (within 5 minutes)
             if time_left <= 5 and time_left >= 0:
                 info.update({
                     "message": f"☕ Break time!\n⏰ {next_break.strftime('%H:%M')} ({time_left} min)",
                     "time_left": time_left,
-                    "next_event": "Break time"
+                    "next_event": "Break time",
+                    "progress_percent": progress_percent
                 })
                 return BreakState.BREAK, info
             else:
                 info.update({
                     "message": f"💼 Next break: {next_break.strftime('%H:%M')}\n⏰ {time_left} minutes to go",
                     "time_left": time_left,
-                    "next_event": f"Break at {next_break.strftime('%H:%M')}"
+                    "next_event": f"Break at {next_break.strftime('%H:%M')}",
+                    "progress_percent": progress_percent
                 })
                 return BreakState.WORK, info
         else:
@@ -140,6 +162,19 @@ class BreakLogic:
             time_left = int((self.workday_end - now).total_seconds() // 60)
             hours_left = time_left // 60
             mins_remaining = time_left % 60
+            
+            # Calculate progress from last break (or start if no breaks taken) to end
+            if len(self.break_times) > 0 and self.next_break_idx > 0:
+                # Progress from last break to end of workday
+                segment_start = self.break_times[-1]
+            else:
+                # Progress from start to end of workday (no breaks taken yet)
+                segment_start = self.start_time
+            
+            total_segment_time = int((self.workday_end - segment_start).total_seconds() // 60)
+            elapsed_segment_time = int((now - segment_start).total_seconds() // 60)
+            progress_percent = int((elapsed_segment_time / total_segment_time) * 100) if total_segment_time > 0 else 0
+            progress_percent = max(0, min(100, progress_percent))  # Clamp to 0-100
             
             if hours_left > 0:
                 time_str = f"{hours_left}h {mins_remaining}m"
@@ -149,7 +184,8 @@ class BreakLogic:
             info.update({
                 "message": f"🏁 No more breaks today!\n⏰ {time_str} until home time",
                 "time_left": time_left,
-                "next_event": "End of workday"
+                "next_event": "End of workday",
+                "progress_percent": progress_percent
             })
             return BreakState.WORK, info
     
