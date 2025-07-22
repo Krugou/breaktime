@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QTimer, QPointF, Qt
 from PyQt5.QtGui import QColor, QCursor, QFont
 from PyQt5.QtWidgets import (QWidget, QLabel, QVBoxLayout, QHBoxLayout, 
-                            QPushButton, QGraphicsDropShadowEffect, QApplication)
+                            QPushButton, QGraphicsDropShadowEffect, QApplication, QProgressBar)
 
 from ..core.break_logic import BreakLogic, BreakState
 from ..core.config import ConfigManager
@@ -109,6 +109,7 @@ class BreakReminderWidget(QWidget):
         # Create UI components
         self.create_status_indicator()
         self.create_labels()
+        self.create_progress_bar()
         self.create_buttons()
         self.create_layout()
         
@@ -140,6 +141,17 @@ class BreakReminderWidget(QWidget):
         self.title_label = QLabel("Break Reminder")
         self.title_label.setStyleSheet(self.style_manager.get_style("title_label"))
         self.title_label.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+    
+    def create_progress_bar(self):
+        """Create progress bar widget."""
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setMinimum(0)
+        self.progress_bar.setMaximum(100)
+        self.progress_bar.setValue(0)
+        self.progress_bar.setStyleSheet(self.style_manager.get_style("progress_bar"))
+        self.progress_bar.setFixedHeight(16)
+        self.progress_bar.setTextVisible(True)
+        self.progress_bar.setFormat("%p%")  # Show percentage
     
     def create_buttons(self):
         """Create control buttons."""
@@ -205,6 +217,12 @@ class BreakReminderWidget(QWidget):
         container_layout.addLayout(header_layout)
         container_layout.addWidget(self.main_label)
         
+        # Add progress bar with margins
+        progress_margins = QHBoxLayout()
+        progress_margins.setContentsMargins(20, 8, 20, 16)
+        progress_margins.addWidget(self.progress_bar)
+        container_layout.addLayout(progress_margins)
+        
         self.container.setLayout(container_layout)
         
         # Assemble main layout
@@ -264,6 +282,20 @@ class BreakReminderWidget(QWidget):
         # Update status indicator
         color = self.style_manager.get_status_color(state.value)
         self.status_indicator.update_status(state, color)
+        
+        # Update progress bar
+        progress_percent = info.get("progress_percent", 0)
+        self.progress_bar.setValue(progress_percent)
+        self.progress_bar.setProperty("breakState", state.value)
+        self.progress_bar.setStyleSheet(self.style_manager.get_style("progress_bar"))
+        
+        # Update progress bar tooltip with more info
+        next_event = info.get("next_event", "Unknown")
+        time_left = info.get("time_left", 0)
+        if time_left > 0:
+            self.progress_bar.setToolTip(f"{next_event} in {time_left} minutes ({progress_percent}% complete)")
+        else:
+            self.progress_bar.setToolTip(f"{next_event} ({progress_percent}% complete)")
         
         # Adjust window size based on content
         self.adjust_window_size()
@@ -329,6 +361,7 @@ class BreakReminderWidget(QWidget):
         self.debug_btn.setStyleSheet(self.style_manager.get_style("debug_button"))
         self.settings_btn.setStyleSheet(self.style_manager.get_style("settings_button"))
         self.close_btn.setStyleSheet(self.style_manager.get_style("close_button"))
+        self.progress_bar.setStyleSheet(self.style_manager.get_style("progress_bar"))
         
         # Update status indicator color
         state, _ = self.break_logic.get_current_state()
