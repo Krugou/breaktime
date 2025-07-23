@@ -17,8 +17,9 @@ echo Starting Break Reminder...
 echo.
 
 python break_reminder_enhanced.py
-
+echo enhanced version launched
 REM If Python execution fails, try the legacy version
+
 if %errorlevel% neq 0 (
     echo.
     echo Enhanced version failed, trying legacy version...
