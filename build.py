@@ -15,19 +15,25 @@ def build_exe():
     build_dir = script_dir / "build"
     dist_dir = script_dir / "dist"
     
-    # PyInstaller command
+    # PyInstaller command with improved single-file executable settings
     cmd = [
         "pyinstaller",
-        "--onefile",
-        "--windowed",  # No console window
+        "--onefile",           # Single file executable
+        "--windowed",          # No console window
         "--name=BreakReminder",
-        "--add-data", f"{script_dir / 'src'};src",
-        "--hidden-import", "PyQt5.QtCore",
-        "--hidden-import", "PyQt5.QtGui", 
-        "--hidden-import", "PyQt5.QtWidgets",
-        "--distpath", str(dist_dir),
-        "--workpath", str(build_dir),
-        "--specpath", str(script_dir),
+        "--clean",             # Clean build
+        "--noconfirm",         # Overwrite without confirmation
+        f"--add-data={script_dir / 'src'}:src",  # Fixed path separator for Linux
+        "--hidden-import=PyQt5.QtCore",
+        "--hidden-import=PyQt5.QtGui", 
+        "--hidden-import=PyQt5.QtWidgets",
+        "--hidden-import=PyQt5.sip",
+        "--collect-submodules=PyQt5",
+        f"--distpath={dist_dir}",
+        f"--workpath={build_dir}",
+        f"--specpath={script_dir}",
+        "--strip",             # Strip binary (smaller size)
+        "--optimize=2",        # Optimize Python bytecode
         str(main_script)
     ]
     
@@ -36,14 +42,26 @@ def build_exe():
     
     try:
         subprocess.run(cmd, check=True)
-        print("\\nBuild completed successfully!")
-        print(f"Executable created at: {dist_dir / 'BreakReminder.exe'}")
         
-        # Create a simple installer bat file
-        create_installer_bat()
+        # Verify the executable was created (no .exe extension on Linux)
+        exe_name = 'BreakReminder.exe' if os.name == 'nt' else 'BreakReminder'
+        exe_path = dist_dir / exe_name
+        if exe_path.exists():
+            print("\\nBuild completed successfully!")
+            print(f"Executable created at: {exe_path}")
+            print(f"Executable size: {exe_path.stat().st_size / (1024*1024):.1f} MB")
+            
+            # Create a simple installer bat file (Windows only)
+            if os.name == 'nt':
+                create_installer_bat()
+        else:
+            print("\\nBuild completed, but executable not found!")
+            print(f"Expected: {exe_path}")
+            sys.exit(1)
         
     except subprocess.CalledProcessError as e:
         print(f"\\nBuild failed with error: {e}")
+        print("\\nTry installing dependencies first: pip install -r requirements.txt")
         sys.exit(1)
     except FileNotFoundError:
         print("\\nError: PyInstaller not found. Please install it with: pip install pyinstaller")

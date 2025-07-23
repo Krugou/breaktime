@@ -20,8 +20,36 @@ class StatusIndicator(QLabel):
         self.setFixedSize(20, 20)
         self.setAlignment(Qt.AlignCenter)
         self.setText('●')
-        self.setStyleSheet("""
-            font-size: 24px;
+        
+        # Calculate font size based on widget size for better scaling
+        self._update_font_size()
+        
+        # Animation for pulsing effect
+        self.animation = QtCore.QPropertyAnimation(self, b"geometry")
+        self.animation.setDuration(1000)
+        self.animation.setLoopCount(-1)
+        
+        # Opacity animation
+        self.opacity_effect = QtWidgets.QGraphicsOpacityEffect()
+        self.setGraphicsEffect(self.opacity_effect)
+        
+        self.opacity_animation = QtCore.QPropertyAnimation(self.opacity_effect, b"opacity")
+        self.opacity_animation.setDuration(2000)
+        self.opacity_animation.setStartValue(0.6)
+        self.opacity_animation.setEndValue(1.0)
+        self.opacity_animation.setLoopCount(-1)
+        
+        # Easing curve for smooth animation
+        self.opacity_animation.setEasingCurve(QtCore.QEasingCurve.InOutSine)
+        
+    def _update_font_size(self):
+        """Update font size based on current widget size for responsive scaling."""
+        # Base font size on the smaller dimension for consistent appearance
+        base_size = min(self.width(), self.height())
+        font_size = max(12, int(base_size * 1.2))  # Scale font with widget size
+        
+        self.setStyleSheet(f"""
+            font-size: {font_size}px;
             background: transparent;
             border: none;
         """)
@@ -51,12 +79,23 @@ class StatusIndicator(QLabel):
             state: Current break state
             color: Color hex code for the status
         """
+        # Get current font size from existing style
+        base_size = min(self.width(), self.height())
+        font_size = max(12, int(base_size * 1.2))
+        
         self.setStyleSheet(f"""
             color: {color};
-            font-size: 24px;
+            font-size: {font_size}px;
             background: transparent;
             border: none;
         """)
+        
+        # Start animation for break and lunch states
+        if state in [BreakState.BREAK, BreakState.LUNCH]:
+            self.opacity_animation.start()
+        else:
+            self.opacity_animation.stop()
+            self.opacity_effect.setOpacity(1.0)
         
         # Start animation for break and lunch states
         if state in [BreakState.BREAK, BreakState.LUNCH]:
@@ -113,10 +152,10 @@ class BreakReminderWidget(QWidget):
         self.create_buttons()
         self.create_layout()
         
-        # Window setup with responsive sizing
-        self.setMinimumSize(380, 140)
-        self.setMaximumSize(520, 260)
-        self.resize(400, 160)
+        # Window setup with responsive sizing - fix geometry conflicts
+        self.setMinimumSize(380, 160)  # Increased minimum height to prevent conflicts
+        self.setMaximumSize(520, 280)  # Increased maximum height for better content display
+        self.resize(400, 180)          # Set initial size within constraints
         self.position_window()
         self.add_drop_shadow()
         
@@ -124,10 +163,12 @@ class BreakReminderWidget(QWidget):
         self.setToolTip("💡 Click and drag to move • Right-click for options")
     
     def create_status_indicator(self):
-        """Create animated status indicator with improved size."""
+        """Create animated status indicator with responsive size."""
         self.status_indicator = StatusIndicator(self)
-        # Make status indicator larger for better visibility
-        self.status_indicator.setFixedSize(20, 20)
+        # Make status indicator size scale with font size
+        font_metrics = self.fontMetrics()
+        indicator_size = max(16, int(font_metrics.height() * 1.0))
+        self.status_indicator.setFixedSize(indicator_size, indicator_size)
     
     def create_labels(self):
         """Create text labels."""
@@ -145,21 +186,30 @@ class BreakReminderWidget(QWidget):
         self.title_label.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
     
     def create_progress_bar(self):
-        """Create progress bar widget with improved height."""
+        """Create progress bar widget with responsive height."""
         self.progress_bar = QProgressBar()
         self.progress_bar.setMinimum(0)
         self.progress_bar.setMaximum(100)
         self.progress_bar.setValue(0)
         self.progress_bar.setStyleSheet(self.style_manager.get_style("progress_bar"))
-        self.progress_bar.setFixedHeight(20)  # Increased from 16px for better visibility
+        
+        # Make progress bar height scale with font size for better responsiveness
+        font_metrics = self.fontMetrics()
+        progress_height = max(18, int(font_metrics.height() * 1.2))
+        self.progress_bar.setFixedHeight(progress_height)
+        
         self.progress_bar.setTextVisible(True)
         self.progress_bar.setFormat("%p%")  # Show percentage
     
     def create_buttons(self):
-        """Create control buttons with improved sizing."""
-        # Debug button - larger for better touch targets
+        """Create control buttons with improved responsive sizing."""
+        # Calculate button size based on font metrics for better scaling
+        font_metrics = self.fontMetrics()
+        base_button_size = max(32, int(font_metrics.height() * 1.8))  # Scale with font size
+        
+        # Debug button - responsive size
         self.debug_btn = QPushButton('🐞')
-        self.debug_btn.setFixedSize(36, 36)
+        self.debug_btn.setFixedSize(base_button_size, base_button_size)
         self.debug_btn.setStyleSheet(self.style_manager.get_style("debug_button"))
         self.debug_btn.setToolTip('Toggle debug information')
         self.debug_btn.setCheckable(True)
@@ -168,14 +218,14 @@ class BreakReminderWidget(QWidget):
         
         # Settings button
         self.settings_btn = QPushButton('⚙️')
-        self.settings_btn.setFixedSize(36, 36)
+        self.settings_btn.setFixedSize(base_button_size, base_button_size)
         self.settings_btn.setStyleSheet(self.style_manager.get_style("settings_button"))
         self.settings_btn.setToolTip('Open settings')
         self.settings_btn.clicked.connect(self.open_settings)
         
         # Close button
         self.close_btn = QPushButton('×')
-        self.close_btn.setFixedSize(36, 36)
+        self.close_btn.setFixedSize(base_button_size, base_button_size)
         self.close_btn.setStyleSheet(self.style_manager.get_style("close_button"))
         self.close_btn.setToolTip('Close application')
         self.close_btn.clicked.connect(self.close)
@@ -232,27 +282,38 @@ class BreakReminderWidget(QWidget):
         self.setLayout(main_layout)
     
     def position_window(self):
-        """Position window based on configuration."""
+        """Position window based on configuration with improved screen boundary handling."""
         screen = QApplication.primaryScreen().geometry()
         position = self.config_manager.get("window_position", "top-right")
         
-        margin = 20
+        # Get current window size
+        window_width = self.width()
+        window_height = self.height()
+        
+        # Use larger margin for better visibility
+        margin = 30
+        
+        # Calculate position with screen boundary checks
         if position == "top-right":
-            x = screen.width() - self.width() - margin
+            x = max(0, screen.width() - window_width - margin)
             y = margin
         elif position == "top-left":
             x = margin
             y = margin
         elif position == "bottom-right":
-            x = screen.width() - self.width() - margin
-            y = screen.height() - self.height() - margin
+            x = max(0, screen.width() - window_width - margin)
+            y = max(margin, screen.height() - window_height - margin - 60)  # Account for taskbar
         elif position == "bottom-left":
             x = margin
-            y = screen.height() - self.height() - margin
+            y = max(margin, screen.height() - window_height - margin - 60)  # Account for taskbar
         else:
-            # Default to top-right
-            x = screen.width() - self.width() - margin
+            # Default to top-right with bounds checking
+            x = max(0, screen.width() - window_width - margin)
             y = margin
+        
+        # Ensure the window stays within screen bounds
+        x = max(0, min(x, screen.width() - window_width))
+        y = max(0, min(y, screen.height() - window_height))
         
         self.move(x, y)
     
@@ -309,22 +370,25 @@ class BreakReminderWidget(QWidget):
             QTimer.singleShot(auto_close_delay * 60 * 1000, self.close)
     
     def adjust_window_size(self):
-        """Dynamically adjust window size based on content with improved spacing."""
+        """Dynamically adjust window size based on content with improved constraints."""
         # Get the preferred size for the main label
         fm = self.main_label.fontMetrics()
         text_rect = fm.boundingRect(
-            0, 0, 450, 240,  # Increased maximum width and height
+            0, 0, 450, 280,  # Increased maximum height to match new constraints
             Qt.TextWordWrap | Qt.AlignCenter,
             self.main_label.text()
         )
         
         # Calculate required height based on text with more generous spacing  
-        required_height = max(140, text_rect.height() + 100)  # 100px for header, progress bar, and margins
-        required_height = min(required_height, 260)  # Don't exceed maximum
+        required_height = max(160, text_rect.height() + 120)  # 120px for header, progress bar, and margins
+        required_height = min(required_height, 280)  # Don't exceed maximum
         
-        # Resize if needed
-        if self.height() != required_height:
-            self.resize(self.width(), required_height)
+        # Only resize if the new size is significantly different to prevent geometry conflicts
+        current_height = self.height()
+        if abs(current_height - required_height) > 10:  # Only resize if difference > 10px
+            # Ensure the new size is within our constraints
+            if self.minimumHeight() <= required_height <= self.maximumHeight():
+                self.resize(self.width(), required_height)
     
     def toggle_debug(self, checked):
         """Toggle debug mode display.
@@ -459,6 +523,31 @@ class BreakReminderWidget(QWidget):
         """)
         msg.setStyleSheet(self.style_manager.get_style("dialog_base"))
         msg.exec_()
+    
+    def resizeEvent(self, event):
+        """Handle resize events to maintain responsive sizing."""
+        super().resizeEvent(event)
+        
+        # Update button sizes when window is resized
+        if hasattr(self, 'debug_btn'):
+            font_metrics = self.fontMetrics()
+            base_button_size = max(32, int(font_metrics.height() * 1.8))
+            
+            self.debug_btn.setFixedSize(base_button_size, base_button_size)
+            self.settings_btn.setFixedSize(base_button_size, base_button_size)
+            self.close_btn.setFixedSize(base_button_size, base_button_size)
+        
+        # Update status indicator size
+        if hasattr(self, 'status_indicator'):
+            font_metrics = self.fontMetrics()
+            indicator_size = max(16, int(font_metrics.height() * 1.0))
+            self.status_indicator.setFixedSize(indicator_size, indicator_size)
+        
+        # Update progress bar height
+        if hasattr(self, 'progress_bar'):
+            font_metrics = self.fontMetrics()
+            progress_height = max(18, int(font_metrics.height() * 1.2))
+            self.progress_bar.setFixedHeight(progress_height)
     
     def closeEvent(self, event):
         """Handle window close event."""
