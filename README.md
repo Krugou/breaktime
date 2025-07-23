@@ -15,7 +15,8 @@ A modern break reminder application with improved visual styling, enhanced usabi
 - **Smooth Animations**: Animated status indicators and smooth transitions
 - **Draggable Interface**: Click and drag the widget anywhere on your screen
 - **System Tray Integration**: Minimize to system tray for seamless operation
-- **Responsive Design**: Hover effects and visual feedback for better interaction
+- **Responsive Design**: Hover effects, visual feedback, and adaptive sizing for different screen DPI
+- **Improved Geometry**: Fixed window sizing conflicts and better screen boundary handling
 
 ### Advanced Configuration
 - **Settings Dialog**: Comprehensive settings with real-time preview
@@ -38,14 +39,19 @@ A modern break reminder application with improved visual styling, enhanced usabi
    ```
 
 ### Building Executable
-Create a standalone Windows executable:
+Create a standalone executable (Windows/Linux):
 ```bash
 python build.py
 ```
 This will:
-- Build a portable `.exe` file in the `dist` folder
-- Create an installer script for easy deployment
+- Build a portable single-file executable in the `dist` folder
+- Create an installer script for easy deployment (Windows only)
 - Bundle all resources for distribution
+- Optimize the executable for size and performance
+
+The executable will be named:
+- `BreakReminder.exe` on Windows
+- `BreakReminder` on Linux/macOS
 
 ## 📁 Project Structure
 
