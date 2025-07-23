@@ -17,11 +17,11 @@ class StatusIndicator(QLabel):
     
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setFixedSize(16, 16)
+        self.setFixedSize(20, 20)
         self.setAlignment(Qt.AlignCenter)
         self.setText('●')
         self.setStyleSheet("""
-            font-size: 22px;
+            font-size: 24px;
             background: transparent;
             border: none;
         """)
@@ -53,7 +53,7 @@ class StatusIndicator(QLabel):
         """
         self.setStyleSheet(f"""
             color: {color};
-            font-size: 22px;
+            font-size: 24px;
             background: transparent;
             border: none;
         """)
@@ -113,10 +113,10 @@ class BreakReminderWidget(QWidget):
         self.create_buttons()
         self.create_layout()
         
-        # Window setup
-        self.setMinimumSize(320, 100)
-        self.setMaximumSize(480, 200)
-        self.resize(340, 120)
+        # Window setup with responsive sizing
+        self.setMinimumSize(380, 140)
+        self.setMaximumSize(520, 260)
+        self.resize(400, 160)
         self.position_window()
         self.add_drop_shadow()
         
@@ -124,8 +124,10 @@ class BreakReminderWidget(QWidget):
         self.setToolTip("💡 Click and drag to move • Right-click for options")
     
     def create_status_indicator(self):
-        """Create animated status indicator."""
+        """Create animated status indicator with improved size."""
         self.status_indicator = StatusIndicator(self)
+        # Make status indicator larger for better visibility
+        self.status_indicator.setFixedSize(20, 20)
     
     def create_labels(self):
         """Create text labels."""
@@ -143,21 +145,21 @@ class BreakReminderWidget(QWidget):
         self.title_label.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
     
     def create_progress_bar(self):
-        """Create progress bar widget."""
+        """Create progress bar widget with improved height."""
         self.progress_bar = QProgressBar()
         self.progress_bar.setMinimum(0)
         self.progress_bar.setMaximum(100)
         self.progress_bar.setValue(0)
         self.progress_bar.setStyleSheet(self.style_manager.get_style("progress_bar"))
-        self.progress_bar.setFixedHeight(16)
+        self.progress_bar.setFixedHeight(20)  # Increased from 16px for better visibility
         self.progress_bar.setTextVisible(True)
         self.progress_bar.setFormat("%p%")  # Show percentage
     
     def create_buttons(self):
-        """Create control buttons."""
-        # Debug button
+        """Create control buttons with improved sizing."""
+        # Debug button - larger for better touch targets
         self.debug_btn = QPushButton('🐞')
-        self.debug_btn.setFixedSize(32, 32)
+        self.debug_btn.setFixedSize(36, 36)
         self.debug_btn.setStyleSheet(self.style_manager.get_style("debug_button"))
         self.debug_btn.setToolTip('Toggle debug information')
         self.debug_btn.setCheckable(True)
@@ -166,45 +168,45 @@ class BreakReminderWidget(QWidget):
         
         # Settings button
         self.settings_btn = QPushButton('⚙️')
-        self.settings_btn.setFixedSize(32, 32)
+        self.settings_btn.setFixedSize(36, 36)
         self.settings_btn.setStyleSheet(self.style_manager.get_style("settings_button"))
         self.settings_btn.setToolTip('Open settings')
         self.settings_btn.clicked.connect(self.open_settings)
         
         # Close button
         self.close_btn = QPushButton('×')
-        self.close_btn.setFixedSize(32, 32)
+        self.close_btn.setFixedSize(36, 36)
         self.close_btn.setStyleSheet(self.style_manager.get_style("close_button"))
         self.close_btn.setToolTip('Close application')
         self.close_btn.clicked.connect(self.close)
     
     def create_layout(self):
-        """Create and setup the layout."""
-        # Main layout
+        """Create and setup the layout with improved spacing."""
+        # Main layout with increased margins
         main_layout = QVBoxLayout()
-        main_layout.setContentsMargins(8, 8, 8, 8)
+        main_layout.setContentsMargins(12, 12, 12, 12)
         main_layout.setSpacing(0)
         
-        # Container layout
+        # Container layout with better spacing
         container_layout = QVBoxLayout()
         container_layout.setContentsMargins(0, 0, 0, 0)
-        container_layout.setSpacing(4)
+        container_layout.setSpacing(8)
         
-        # Header layout
+        # Header layout with increased margins
         header_layout = QHBoxLayout()
-        header_layout.setContentsMargins(16, 12, 16, 8)
-        header_layout.setSpacing(8)
+        header_layout.setContentsMargins(20, 16, 20, 12)
+        header_layout.setSpacing(12)
         
-        # Status section
+        # Status section with better spacing
         status_section = QHBoxLayout()
-        status_section.setSpacing(12)
+        status_section.setSpacing(16)
         status_section.addWidget(self.status_indicator)
         status_section.addWidget(self.title_label)
         status_section.addStretch()
         
-        # Controls section
+        # Controls section with increased spacing
         controls_section = QHBoxLayout()
-        controls_section.setSpacing(6)
+        controls_section.setSpacing(8)
         controls_section.addWidget(self.debug_btn)
         controls_section.addWidget(self.settings_btn)
         controls_section.addWidget(self.close_btn)
@@ -217,9 +219,9 @@ class BreakReminderWidget(QWidget):
         container_layout.addLayout(header_layout)
         container_layout.addWidget(self.main_label)
         
-        # Add progress bar with margins
+        # Add progress bar with increased margins
         progress_margins = QHBoxLayout()
-        progress_margins.setContentsMargins(20, 8, 20, 16)
+        progress_margins.setContentsMargins(24, 12, 24, 20)
         progress_margins.addWidget(self.progress_bar)
         container_layout.addLayout(progress_margins)
         
@@ -307,18 +309,18 @@ class BreakReminderWidget(QWidget):
             QTimer.singleShot(auto_close_delay * 60 * 1000, self.close)
     
     def adjust_window_size(self):
-        """Dynamically adjust window size based on content."""
+        """Dynamically adjust window size based on content with improved spacing."""
         # Get the preferred size for the main label
         fm = self.main_label.fontMetrics()
         text_rect = fm.boundingRect(
-            0, 0, 400, 200,  # Maximum width and height
+            0, 0, 450, 240,  # Increased maximum width and height
             Qt.TextWordWrap | Qt.AlignCenter,
             self.main_label.text()
         )
         
-        # Calculate required height based on text
-        required_height = max(100, text_rect.height() + 80)  # 80px for header and margins
-        required_height = min(required_height, 200)  # Don't exceed maximum
+        # Calculate required height based on text with more generous spacing  
+        required_height = max(140, text_rect.height() + 100)  # 100px for header, progress bar, and margins
+        required_height = min(required_height, 260)  # Don't exceed maximum
         
         # Resize if needed
         if self.height() != required_height:

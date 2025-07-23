@@ -65,7 +65,7 @@ class StyleManager:
                     font-size: 16px;
                     font-weight: 500;
                     font-family: 'Segoe UI', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
-                    padding: 16px 20px;
+                    padding: 20px 24px;
                     background: transparent;
                     border: none;
                 }
@@ -97,11 +97,11 @@ class StyleManager:
                         stop:1 rgba(255, 159, 0, 180));
                     color: #212529;
                     border: 1px solid rgba(255, 193, 7, 100);
-                    border-radius: 16px;
+                    border-radius: 18px;
                     font-size: 14px;
                     font-weight: 600;
-                    min-width: 32px;
-                    min-height: 32px;
+                    min-width: 36px;
+                    min-height: 36px;
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
@@ -128,11 +128,11 @@ class StyleManager:
                         stop:1 rgba(185, 28, 28, 180));
                     color: white;
                     border: 1px solid rgba(220, 53, 69, 100);
-                    border-radius: 16px;
+                    border-radius: 18px;
                     font-weight: 700;
                     font-size: 16px;
-                    min-width: 32px;
-                    min-height: 32px;
+                    min-width: 36px;
+                    min-height: 36px;
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
@@ -153,11 +153,11 @@ class StyleManager:
                         stop:1 rgba(73, 80, 87, 180));
                     color: white;
                     border: 1px solid rgba(108, 117, 125, 100);
-                    border-radius: 16px;
+                    border-radius: 18px;
                     font-weight: 600;
                     font-size: 14px;
-                    min-width: 32px;
-                    min-height: 32px;
+                    min-width: 36px;
+                    min-height: 36px;
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
@@ -232,10 +232,10 @@ class StyleManager:
                 QProgressBar {
                     border: none;
                     background: rgba(255, 255, 255, 0.1);
-                    border-radius: 8px;
-                    height: 16px;
+                    border-radius: 10px;
+                    height: 20px;
                     text-align: center;
-                    font-size: 11px;
+                    font-size: 12px;
                     font-weight: 600;
                     font-family: 'Segoe UI', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
                     color: rgba(255, 255, 255, 0.8);
@@ -244,7 +244,7 @@ class StyleManager:
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                         stop:0 rgba(16, 185, 129, 200),
                         stop:1 rgba(5, 150, 105, 200));
-                    border-radius: 8px;
+                    border-radius: 10px;
                     border: none;
                 }
                 QProgressBar[breakState="work"]::chunk {
@@ -307,7 +307,7 @@ class StyleManager:
                     font-size: 16px;
                     font-weight: 500;
                     font-family: 'Segoe UI', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
-                    padding: 16px 20px;
+                    padding: 20px 24px;
                     background: transparent;
                     border: none;
                 }
@@ -339,11 +339,11 @@ class StyleManager:
                         stop:1 rgba(255, 159, 0, 200));
                     color: #212529;
                     border: 1px solid rgba(255, 193, 7, 120);
-                    border-radius: 16px;
+                    border-radius: 18px;
                     font-size: 14px;
                     font-weight: 600;
-                    min-width: 32px;
-                    min-height: 32px;
+                    min-width: 36px;
+                    min-height: 36px;
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
@@ -370,11 +370,11 @@ class StyleManager:
                         stop:1 rgba(185, 28, 28, 200));
                     color: white;
                     border: 1px solid rgba(220, 53, 69, 120);
-                    border-radius: 16px;
+                    border-radius: 18px;
                     font-weight: 700;
                     font-size: 16px;
-                    min-width: 32px;
-                    min-height: 32px;
+                    min-width: 36px;
+                    min-height: 36px;
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
@@ -395,11 +395,11 @@ class StyleManager:
                         stop:1 rgba(73, 80, 87, 200));
                     color: white;
                     border: 1px solid rgba(108, 117, 125, 120);
-                    border-radius: 16px;
+                    border-radius: 18px;
                     font-weight: 600;
                     font-size: 14px;
-                    min-width: 32px;
-                    min-height: 32px;
+                    min-width: 36px;
+                    min-height: 36px;
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
@@ -473,10 +473,10 @@ class StyleManager:
                 QProgressBar {
                     border: 1px solid rgba(0, 0, 0, 0.1);
                     background: rgba(0, 0, 0, 0.05);
-                    border-radius: 8px;
-                    height: 16px;
+                    border-radius: 10px;
+                    height: 20px;
                     text-align: center;
-                    font-size: 11px;
+                    font-size: 12px;
                     font-weight: 600;
                     font-family: 'Segoe UI', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
                     color: rgba(0, 0, 0, 0.7);
@@ -485,7 +485,7 @@ class StyleManager:
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                         stop:0 rgba(5, 150, 105, 220),
                         stop:1 rgba(4, 120, 87, 220));
-                    border-radius: 8px;
+                    border-radius: 10px;
                     border: none;
                 }
                 QProgressBar[breakState="work"]::chunk {
