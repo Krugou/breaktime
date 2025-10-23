@@ -21,27 +21,22 @@ class StatusIndicator(QLabel):
         self.setAlignment(Qt.AlignCenter)
         self.setText('●')
         
-        # Calculate font size based on widget size for better scaling
-        self._update_font_size()
-        
-        # Animation for pulsing effect
-        self.animation = QtCore.QPropertyAnimation(self, b"geometry")
-        self.animation.setDuration(1000)
-        self.animation.setLoopCount(-1)
-        
-        # Opacity animation
+        # Opacity animation for pulsing effect
         self.opacity_effect = QtWidgets.QGraphicsOpacityEffect()
         self.setGraphicsEffect(self.opacity_effect)
         
         self.opacity_animation = QtCore.QPropertyAnimation(self.opacity_effect, b"opacity")
-        self.opacity_animation.setDuration(2000)
-        self.opacity_animation.setStartValue(0.6)
+        self.opacity_animation.setDuration(1500)  # Slightly faster for more lively feel
+        self.opacity_animation.setStartValue(0.5)
         self.opacity_animation.setEndValue(1.0)
         self.opacity_animation.setLoopCount(-1)
         
-        # Easing curve for smooth animation
-        self.opacity_animation.setEasingCurve(QtCore.QEasingCurve.InOutSine)
+        # Smooth easing curve for organic feel
+        self.opacity_animation.setEasingCurve(QtCore.QEasingCurve.InOutQuad)
         
+        # Calculate font size based on widget size for better scaling
+        self._update_font_size()
+    
     def _update_font_size(self):
         """Update font size based on current widget size for responsive scaling."""
         # Base font size on the smaller dimension for consistent appearance
@@ -53,24 +48,6 @@ class StatusIndicator(QLabel):
             background: transparent;
             border: none;
         """)
-        
-        # Animation for pulsing effect
-        self.animation = QtCore.QPropertyAnimation(self, b"geometry")
-        self.animation.setDuration(1000)
-        self.animation.setLoopCount(-1)
-        
-        # Opacity animation
-        self.opacity_effect = QtWidgets.QGraphicsOpacityEffect()
-        self.setGraphicsEffect(self.opacity_effect)
-        
-        self.opacity_animation = QtCore.QPropertyAnimation(self.opacity_effect, b"opacity")
-        self.opacity_animation.setDuration(2000)
-        self.opacity_animation.setStartValue(0.6)
-        self.opacity_animation.setEndValue(1.0)
-        self.opacity_animation.setLoopCount(-1)
-        
-        # Easing curve for smooth animation
-        self.opacity_animation.setEasingCurve(QtCore.QEasingCurve.InOutSine)
     
     def update_status(self, state: BreakState, color: str):
         """Update status indicator with new state and color.
@@ -90,19 +67,14 @@ class StatusIndicator(QLabel):
             border: none;
         """)
         
-        # Start animation for break and lunch states
+        # Start animation for break and lunch states only
         if state in [BreakState.BREAK, BreakState.LUNCH]:
-            self.opacity_animation.start()
+            if not self.opacity_animation.state() == QtCore.QAbstractAnimation.Running:
+                self.opacity_animation.start()
         else:
             self.opacity_animation.stop()
             self.opacity_effect.setOpacity(1.0)
-        
-        # Start animation for break and lunch states
-        if state in [BreakState.BREAK, BreakState.LUNCH]:
-            self.opacity_animation.start()
-        else:
-            self.opacity_animation.stop()
-            self.opacity_effect.setOpacity(1.0)
+
 
 
 class BreakReminderWidget(QWidget):
