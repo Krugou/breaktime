@@ -215,6 +215,7 @@ class BreakReminderWidget(QWidget):
         self.debug_btn.setCheckable(True)
         self.debug_btn.setChecked(self.config_manager.get("debug_mode", False))
         self.debug_btn.toggled.connect(self.toggle_debug)
+        self.debug_btn.setCursor(Qt.PointingHandCursor)
         
         # Settings button
         self.settings_btn = QPushButton('⚙️')
@@ -222,6 +223,7 @@ class BreakReminderWidget(QWidget):
         self.settings_btn.setStyleSheet(self.style_manager.get_style("settings_button"))
         self.settings_btn.setToolTip('Open settings')
         self.settings_btn.clicked.connect(self.open_settings)
+        self.settings_btn.setCursor(Qt.PointingHandCursor)
         
         # Close button
         self.close_btn = QPushButton('×')
@@ -229,6 +231,7 @@ class BreakReminderWidget(QWidget):
         self.close_btn.setStyleSheet(self.style_manager.get_style("close_button"))
         self.close_btn.setToolTip('Close application')
         self.close_btn.clicked.connect(self.close)
+        self.close_btn.setCursor(Qt.PointingHandCursor)
     
     def create_layout(self):
         """Create and setup the layout with improved spacing."""
