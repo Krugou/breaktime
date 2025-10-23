@@ -330,16 +330,8 @@ class BreakReminderWidget(QWidget):
         # Update progress bar tooltip with more info
         next_event = info.get("next_event", "Unknown")
         time_left = info.get("time_left", 0)
-        if time_left > 0:
-            hours = time_left // 60
-            minutes = time_left % 60
-            if hours > 0:
-                time_str = f"{hours}h {minutes}m"
-            else:
-                time_str = f"{minutes} minutes"
-            self.progress_bar.setToolTip(f"📅 {next_event}\n⏱️ {time_str} remaining\n📊 {progress_percent}% complete")
-        else:
-            self.progress_bar.setToolTip(f"📅 {next_event}\n📊 {progress_percent}% complete")
+        tooltip = self._format_progress_tooltip(next_event, time_left, progress_percent)
+        self.progress_bar.setToolTip(tooltip)
         
         # Adjust window size based on content
         self.adjust_window_size()
@@ -370,6 +362,43 @@ class BreakReminderWidget(QWidget):
             # Ensure the new size is within our constraints
             if self.minimumHeight() <= required_height <= self.maximumHeight():
                 self.resize(self.width(), required_height)
+    
+    def _format_time_remaining(self, minutes: int) -> str:
+        """Format time remaining in a human-readable format.
+        
+        Args:
+            minutes: Time remaining in minutes
+            
+        Returns:
+            Formatted time string (e.g., "2h 15m" or "45 minutes")
+        """
+        if minutes <= 0:
+            return ""
+        
+        hours = minutes // 60
+        mins = minutes % 60
+        
+        if hours > 0:
+            return f"{hours}h {mins}m"
+        else:
+            return f"{minutes} minutes"
+    
+    def _format_progress_tooltip(self, event: str, time_left: int, percent: int) -> str:
+        """Format progress bar tooltip with event info and time remaining.
+        
+        Args:
+            event: Name of the next event
+            time_left: Time remaining in minutes
+            percent: Completion percentage
+            
+        Returns:
+            Formatted tooltip string
+        """
+        if time_left > 0:
+            time_str = self._format_time_remaining(time_left)
+            return f"📅 {event}\n⏱️ {time_str} remaining\n📊 {percent}% complete"
+        else:
+            return f"📅 {event}\n📊 {percent}% complete"
     
     def toggle_debug(self, checked):
         """Toggle debug mode display.
