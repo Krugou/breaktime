@@ -132,7 +132,7 @@ class BreakReminderWidget(QWidget):
         self.add_drop_shadow()
         
         # Tooltip for drag functionality
-        self.setToolTip("💡 Click and drag to move • Right-click for options")
+        self.setToolTip("💡 Tips:\n• Click and drag to move\n• Right-click for options\n• Hover over progress bar for details")
     
     def create_status_indicator(self):
         """Create animated status indicator with responsive size."""
@@ -183,7 +183,7 @@ class BreakReminderWidget(QWidget):
         self.debug_btn = QPushButton('🐞')
         self.debug_btn.setFixedSize(base_button_size, base_button_size)
         self.debug_btn.setStyleSheet(self.style_manager.get_style("debug_button"))
-        self.debug_btn.setToolTip('Toggle debug information')
+        self.debug_btn.setToolTip('🐞 Debug Mode\nShow/hide detailed timing information')
         self.debug_btn.setCheckable(True)
         self.debug_btn.setChecked(self.config_manager.get("debug_mode", False))
         self.debug_btn.toggled.connect(self.toggle_debug)
@@ -193,7 +193,7 @@ class BreakReminderWidget(QWidget):
         self.settings_btn = QPushButton('⚙️')
         self.settings_btn.setFixedSize(base_button_size, base_button_size)
         self.settings_btn.setStyleSheet(self.style_manager.get_style("settings_button"))
-        self.settings_btn.setToolTip('Open settings')
+        self.settings_btn.setToolTip('⚙️ Settings\nConfigure work schedule and appearance')
         self.settings_btn.clicked.connect(self.open_settings)
         self.settings_btn.setCursor(Qt.PointingHandCursor)
         
@@ -201,7 +201,7 @@ class BreakReminderWidget(QWidget):
         self.close_btn = QPushButton('×')
         self.close_btn.setFixedSize(base_button_size, base_button_size)
         self.close_btn.setStyleSheet(self.style_manager.get_style("close_button"))
-        self.close_btn.setToolTip('Close application')
+        self.close_btn.setToolTip('❌ Close\nMinimizes to system tray if available')
         self.close_btn.clicked.connect(self.close)
         self.close_btn.setCursor(Qt.PointingHandCursor)
     
@@ -331,9 +331,15 @@ class BreakReminderWidget(QWidget):
         next_event = info.get("next_event", "Unknown")
         time_left = info.get("time_left", 0)
         if time_left > 0:
-            self.progress_bar.setToolTip(f"{next_event} in {time_left} minutes ({progress_percent}% complete)")
+            hours = time_left // 60
+            minutes = time_left % 60
+            if hours > 0:
+                time_str = f"{hours}h {minutes}m"
+            else:
+                time_str = f"{minutes} minutes"
+            self.progress_bar.setToolTip(f"📅 {next_event}\n⏱️ {time_str} remaining\n📊 {progress_percent}% complete")
         else:
-            self.progress_bar.setToolTip(f"{next_event} ({progress_percent}% complete)")
+            self.progress_bar.setToolTip(f"📅 {next_event}\n📊 {progress_percent}% complete")
         
         # Adjust window size based on content
         self.adjust_window_size()
