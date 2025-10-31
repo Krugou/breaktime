@@ -21,27 +21,22 @@ class StatusIndicator(QLabel):
         self.setAlignment(Qt.AlignCenter)
         self.setText('●')
         
-        # Calculate font size based on widget size for better scaling
-        self._update_font_size()
-        
-        # Animation for pulsing effect
-        self.animation = QtCore.QPropertyAnimation(self, b"geometry")
-        self.animation.setDuration(1000)
-        self.animation.setLoopCount(-1)
-        
-        # Opacity animation
+        # Opacity animation for pulsing effect
         self.opacity_effect = QtWidgets.QGraphicsOpacityEffect()
         self.setGraphicsEffect(self.opacity_effect)
         
         self.opacity_animation = QtCore.QPropertyAnimation(self.opacity_effect, b"opacity")
-        self.opacity_animation.setDuration(2000)
-        self.opacity_animation.setStartValue(0.6)
+        self.opacity_animation.setDuration(1500)  # Slightly faster for more lively feel
+        self.opacity_animation.setStartValue(0.5)
         self.opacity_animation.setEndValue(1.0)
         self.opacity_animation.setLoopCount(-1)
         
-        # Easing curve for smooth animation
-        self.opacity_animation.setEasingCurve(QtCore.QEasingCurve.InOutSine)
+        # Smooth easing curve for organic feel
+        self.opacity_animation.setEasingCurve(QtCore.QEasingCurve.InOutQuad)
         
+        # Calculate font size based on widget size for better scaling
+        self._update_font_size()
+    
     def _update_font_size(self):
         """Update font size based on current widget size for responsive scaling."""
         # Base font size on the smaller dimension for consistent appearance
@@ -53,24 +48,6 @@ class StatusIndicator(QLabel):
             background: transparent;
             border: none;
         """)
-        
-        # Animation for pulsing effect
-        self.animation = QtCore.QPropertyAnimation(self, b"geometry")
-        self.animation.setDuration(1000)
-        self.animation.setLoopCount(-1)
-        
-        # Opacity animation
-        self.opacity_effect = QtWidgets.QGraphicsOpacityEffect()
-        self.setGraphicsEffect(self.opacity_effect)
-        
-        self.opacity_animation = QtCore.QPropertyAnimation(self.opacity_effect, b"opacity")
-        self.opacity_animation.setDuration(2000)
-        self.opacity_animation.setStartValue(0.6)
-        self.opacity_animation.setEndValue(1.0)
-        self.opacity_animation.setLoopCount(-1)
-        
-        # Easing curve for smooth animation
-        self.opacity_animation.setEasingCurve(QtCore.QEasingCurve.InOutSine)
     
     def update_status(self, state: BreakState, color: str):
         """Update status indicator with new state and color.
@@ -90,19 +67,14 @@ class StatusIndicator(QLabel):
             border: none;
         """)
         
-        # Start animation for break and lunch states
+        # Start animation for break and lunch states only
         if state in [BreakState.BREAK, BreakState.LUNCH]:
-            self.opacity_animation.start()
+            if not self.opacity_animation.state() == QtCore.QAbstractAnimation.Running:
+                self.opacity_animation.start()
         else:
             self.opacity_animation.stop()
             self.opacity_effect.setOpacity(1.0)
-        
-        # Start animation for break and lunch states
-        if state in [BreakState.BREAK, BreakState.LUNCH]:
-            self.opacity_animation.start()
-        else:
-            self.opacity_animation.stop()
-            self.opacity_effect.setOpacity(1.0)
+
 
 
 class BreakReminderWidget(QWidget):
@@ -160,7 +132,7 @@ class BreakReminderWidget(QWidget):
         self.add_drop_shadow()
         
         # Tooltip for drag functionality
-        self.setToolTip("💡 Click and drag to move • Right-click for options")
+        self.setToolTip("💡 Tips:\n• Click and drag to move\n• Right-click for options\n• Hover over progress bar for details")
     
     def create_status_indicator(self):
         """Create animated status indicator with responsive size."""
@@ -211,24 +183,27 @@ class BreakReminderWidget(QWidget):
         self.debug_btn = QPushButton('🐞')
         self.debug_btn.setFixedSize(base_button_size, base_button_size)
         self.debug_btn.setStyleSheet(self.style_manager.get_style("debug_button"))
-        self.debug_btn.setToolTip('Toggle debug information')
+        self.debug_btn.setToolTip('🐞 Debug Mode\nShow/hide detailed timing information')
         self.debug_btn.setCheckable(True)
         self.debug_btn.setChecked(self.config_manager.get("debug_mode", False))
         self.debug_btn.toggled.connect(self.toggle_debug)
+        self.debug_btn.setCursor(Qt.PointingHandCursor)
         
         # Settings button
         self.settings_btn = QPushButton('⚙️')
         self.settings_btn.setFixedSize(base_button_size, base_button_size)
         self.settings_btn.setStyleSheet(self.style_manager.get_style("settings_button"))
-        self.settings_btn.setToolTip('Open settings')
+        self.settings_btn.setToolTip('⚙️ Settings\nConfigure work schedule and appearance')
         self.settings_btn.clicked.connect(self.open_settings)
+        self.settings_btn.setCursor(Qt.PointingHandCursor)
         
         # Close button
         self.close_btn = QPushButton('×')
         self.close_btn.setFixedSize(base_button_size, base_button_size)
         self.close_btn.setStyleSheet(self.style_manager.get_style("close_button"))
-        self.close_btn.setToolTip('Close application')
+        self.close_btn.setToolTip('❌ Close\nMinimizes to system tray if available')
         self.close_btn.clicked.connect(self.close)
+        self.close_btn.setCursor(Qt.PointingHandCursor)
     
     def create_layout(self):
         """Create and setup the layout with improved spacing."""
@@ -355,10 +330,8 @@ class BreakReminderWidget(QWidget):
         # Update progress bar tooltip with more info
         next_event = info.get("next_event", "Unknown")
         time_left = info.get("time_left", 0)
-        if time_left > 0:
-            self.progress_bar.setToolTip(f"{next_event} in {time_left} minutes ({progress_percent}% complete)")
-        else:
-            self.progress_bar.setToolTip(f"{next_event} ({progress_percent}% complete)")
+        tooltip = self._format_progress_tooltip(next_event, time_left, progress_percent)
+        self.progress_bar.setToolTip(tooltip)
         
         # Adjust window size based on content
         self.adjust_window_size()
@@ -389,6 +362,43 @@ class BreakReminderWidget(QWidget):
             # Ensure the new size is within our constraints
             if self.minimumHeight() <= required_height <= self.maximumHeight():
                 self.resize(self.width(), required_height)
+    
+    def _format_time_remaining(self, minutes: int) -> str:
+        """Format time remaining in a human-readable format.
+        
+        Args:
+            minutes: Time remaining in minutes
+            
+        Returns:
+            Formatted time string (e.g., "2h 15m" or "45 minutes")
+        """
+        if minutes <= 0:
+            return ""
+        
+        hours = minutes // 60
+        mins = minutes % 60
+        
+        if hours > 0:
+            return f"{hours}h {mins}m"
+        else:
+            return f"{minutes} minutes"
+    
+    def _format_progress_tooltip(self, event: str, time_left: int, percent: int) -> str:
+        """Format progress bar tooltip with event info and time remaining.
+        
+        Args:
+            event: Name of the next event
+            time_left: Time remaining in minutes
+            percent: Completion percentage
+            
+        Returns:
+            Formatted tooltip string
+        """
+        if time_left > 0:
+            time_str = self._format_time_remaining(time_left)
+            return f"📅 {event}\n⏱️ {time_str} remaining\n📊 {percent}% complete"
+        else:
+            return f"📅 {event}\n📊 {percent}% complete"
     
     def toggle_debug(self, checked):
         """Toggle debug mode display.

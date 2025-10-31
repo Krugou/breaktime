@@ -1,7 +1,6 @@
 """Main application entry point for Break Reminder."""
 
 import sys
-import tkinter as tk
 from PyQt5.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QAction, QMessageBox
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QIcon
@@ -16,9 +15,6 @@ class BreakReminderApp:
 
     def __init__(self):
         """Initialize the application."""
-        self.root = tk.Tk()
-        self.setup_window()
-
         self.app = QApplication(sys.argv)
         self.app.setQuitOnLastWindowClosed(False)  # Keep running in system tray
 
@@ -34,13 +30,6 @@ class BreakReminderApp:
         # Show main widget or start minimized
         if not self.config_manager.get("start_minimized", False):
             self.show_main_widget()
-
-    def setup_window(self):
-        """Set up the main window."""
-        self.root.title("Break Reminder Enhanced")
-        self.root.geometry("400x300")  # Set initial size only
-        self.root.minsize(380, 160)    # Set minimum size
-        # Remove any code that sets window position explicitly
 
     def init_system_tray(self):
         """Initialize system tray icon and menu."""

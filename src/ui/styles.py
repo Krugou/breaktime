@@ -105,20 +105,27 @@ class StyleManager:
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                        stop:0 rgba(255, 193, 7, 220),
-                        stop:1 rgba(255, 159, 0, 220));
-                    border: 1px solid rgba(255, 193, 7, 150);
+                        stop:0 rgba(255, 210, 50, 230),
+                        stop:1 rgba(255, 170, 20, 230));
+                    border: 1px solid rgba(255, 193, 7, 180);
+                    transform: scale(1.05);
                 }
                 QPushButton:pressed {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                         stop:0 rgba(255, 159, 0, 200),
                         stop:1 rgba(255, 111, 0, 200));
+                    transform: scale(0.95);
                 }
                 QPushButton:checked {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                         stop:0 rgba(255, 224, 102, 255),
                         stop:1 rgba(255, 193, 7, 255));
                     color: #000000;
+                    font-weight: 700;
+                }
+                QPushButton:focus {
+                    outline: 2px solid rgba(255, 193, 7, 200);
+                    outline-offset: 2px;
                 }
             """,
             "close_button": """
@@ -136,14 +143,20 @@ class StyleManager:
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                        stop:0 rgba(220, 53, 69, 220),
-                        stop:1 rgba(185, 28, 28, 220));
-                    border: 1px solid rgba(220, 53, 69, 150);
+                        stop:0 rgba(239, 68, 68, 230),
+                        stop:1 rgba(220, 38, 38, 230));
+                    border: 1px solid rgba(220, 53, 69, 180);
+                    transform: scale(1.05);
                 }
                 QPushButton:pressed {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                         stop:0 rgba(185, 28, 28, 200),
                         stop:1 rgba(153, 27, 27, 200));
+                    transform: scale(0.95);
+                }
+                QPushButton:focus {
+                    outline: 2px solid rgba(220, 53, 69, 200);
+                    outline-offset: 2px;
                 }
             """,
             "settings_button": """
@@ -161,14 +174,20 @@ class StyleManager:
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                        stop:0 rgba(108, 117, 125, 220),
-                        stop:1 rgba(73, 80, 87, 220));
-                    border: 1px solid rgba(108, 117, 125, 150);
+                        stop:0 rgba(128, 137, 145, 230),
+                        stop:1 rgba(93, 100, 107, 230));
+                    border: 1px solid rgba(108, 117, 125, 180);
+                    transform: scale(1.05);
                 }
                 QPushButton:pressed {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                         stop:0 rgba(73, 80, 87, 200),
                         stop:1 rgba(52, 58, 64, 200));
+                    transform: scale(0.95);
+                }
+                QPushButton:focus {
+                    outline: 2px solid rgba(108, 117, 125, 200);
+                    outline-offset: 2px;
                 }
             """,
             "dialog_base": """
@@ -189,7 +208,7 @@ class StyleManager:
                 }
             """,
             "dialog_input": """
-                QLineEdit {
+                QLineEdit, QComboBox, QSpinBox {
                     border: 2px solid rgba(255, 255, 255, 0.1);
                     border-radius: 8px;
                     padding: 12px 16px;
@@ -199,13 +218,47 @@ class StyleManager:
                     selection-background-color: #3182ce;
                     min-height: 20px;
                 }
-                QLineEdit:focus {
+                QLineEdit:focus, QComboBox:focus, QSpinBox:focus {
                     border-color: #3182ce;
                     background: rgba(255, 255, 255, 0.08);
                     outline: none;
                 }
+                QLineEdit:hover, QComboBox:hover, QSpinBox:hover {
+                    border-color: rgba(49, 130, 206, 0.5);
+                    background: rgba(255, 255, 255, 0.07);
+                }
                 QLineEdit::placeholder {
                     color: rgba(255, 255, 255, 0.5);
+                }
+                QComboBox::drop-down {
+                    border: none;
+                    width: 30px;
+                }
+                QComboBox::down-arrow {
+                    image: none;
+                    border: 2px solid #ffffff;
+                    width: 8px;
+                    height: 8px;
+                    border-top: none;
+                    border-right: none;
+                    transform: rotate(-45deg);
+                }
+                QComboBox QAbstractItemView {
+                    background: rgba(45, 55, 72, 240);
+                    color: #ffffff;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 8px;
+                    selection-background-color: #3182ce;
+                    padding: 4px;
+                }
+                QSpinBox::up-button, QSpinBox::down-button {
+                    background: rgba(255, 255, 255, 0.1);
+                    border: none;
+                    width: 20px;
+                    border-radius: 4px;
+                }
+                QSpinBox::up-button:hover, QSpinBox::down-button:hover {
+                    background: rgba(49, 130, 206, 0.5);
                 }
             """,
             "dialog_button": """
@@ -222,50 +275,61 @@ class StyleManager:
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                        stop:0 #2c5aa0, stop:1 #2a4d8d);
+                        stop:0 #3b93e8, stop:1 #3182ce);
+                    transform: scale(1.02);
                 }
                 QPushButton:pressed {
                     background: #2a4d8d;
+                    transform: scale(0.98);
+                }
+                QPushButton:focus {
+                    outline: 2px solid rgba(49, 130, 206, 200);
+                    outline-offset: 2px;
                 }
             """,
             "progress_bar": """
                 QProgressBar {
                     border: none;
-                    background: rgba(255, 255, 255, 0.1);
+                    background: rgba(255, 255, 255, 0.08);
                     border-radius: 10px;
                     height: 20px;
                     text-align: center;
                     font-size: 12px;
                     font-weight: 600;
                     font-family: 'Segoe UI', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
-                    color: rgba(255, 255, 255, 0.8);
+                    color: rgba(255, 255, 255, 0.9);
                 }
                 QProgressBar::chunk {
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                        stop:0 rgba(16, 185, 129, 200),
-                        stop:1 rgba(5, 150, 105, 200));
+                        stop:0 rgba(16, 185, 129, 220),
+                        stop:0.5 rgba(10, 170, 115, 220),
+                        stop:1 rgba(5, 150, 105, 220));
                     border-radius: 10px;
                     border: none;
                 }
                 QProgressBar[breakState="work"]::chunk {
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                        stop:0 rgba(16, 185, 129, 200),
-                        stop:1 rgba(5, 150, 105, 200));
+                        stop:0 rgba(16, 185, 129, 220),
+                        stop:0.5 rgba(10, 170, 115, 220),
+                        stop:1 rgba(5, 150, 105, 220));
                 }
                 QProgressBar[breakState="break"]::chunk {
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                        stop:0 rgba(245, 158, 11, 200),
-                        stop:1 rgba(217, 119, 6, 200));
+                        stop:0 rgba(245, 158, 11, 220),
+                        stop:0.5 rgba(231, 138, 8, 220),
+                        stop:1 rgba(217, 119, 6, 220));
                 }
                 QProgressBar[breakState="lunch"]::chunk {
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                        stop:0 rgba(59, 130, 246, 200),
-                        stop:1 rgba(37, 99, 235, 200));
+                        stop:0 rgba(59, 130, 246, 220),
+                        stop:0.5 rgba(48, 114, 240, 220),
+                        stop:1 rgba(37, 99, 235, 220));
                 }
                 QProgressBar[breakState="done"]::chunk {
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                        stop:0 rgba(139, 92, 246, 200),
-                        stop:1 rgba(124, 58, 237, 200));
+                        stop:0 rgba(139, 92, 246, 220),
+                        stop:0.5 rgba(131, 75, 241, 220),
+                        stop:1 rgba(124, 58, 237, 220));
                 }
             """,
             "status_colors": {
@@ -347,20 +411,27 @@ class StyleManager:
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                        stop:0 rgba(255, 193, 7, 240),
-                        stop:1 rgba(255, 159, 0, 240));
-                    border: 1px solid rgba(255, 193, 7, 170);
+                        stop:0 rgba(255, 210, 50, 250),
+                        stop:1 rgba(255, 170, 20, 250));
+                    border: 1px solid rgba(255, 193, 7, 200);
+                    transform: scale(1.05);
                 }
                 QPushButton:pressed {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                         stop:0 rgba(255, 159, 0, 220),
                         stop:1 rgba(255, 111, 0, 220));
+                    transform: scale(0.95);
                 }
                 QPushButton:checked {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                         stop:0 rgba(255, 224, 102, 255),
                         stop:1 rgba(255, 193, 7, 255));
                     color: #000000;
+                    font-weight: 700;
+                }
+                QPushButton:focus {
+                    outline: 2px solid rgba(255, 193, 7, 200);
+                    outline-offset: 2px;
                 }
             """,
             "close_button": """
@@ -378,14 +449,20 @@ class StyleManager:
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                        stop:0 rgba(220, 53, 69, 240),
-                        stop:1 rgba(185, 28, 28, 240));
-                    border: 1px solid rgba(220, 53, 69, 170);
+                        stop:0 rgba(239, 68, 68, 250),
+                        stop:1 rgba(220, 38, 38, 250));
+                    border: 1px solid rgba(220, 53, 69, 200);
+                    transform: scale(1.05);
                 }
                 QPushButton:pressed {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                         stop:0 rgba(185, 28, 28, 220),
                         stop:1 rgba(153, 27, 27, 220));
+                    transform: scale(0.95);
+                }
+                QPushButton:focus {
+                    outline: 2px solid rgba(220, 53, 69, 200);
+                    outline-offset: 2px;
                 }
             """,
             "settings_button": """
@@ -403,14 +480,20 @@ class StyleManager:
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                        stop:0 rgba(108, 117, 125, 240),
-                        stop:1 rgba(73, 80, 87, 240));
-                    border: 1px solid rgba(108, 117, 125, 170);
+                        stop:0 rgba(128, 137, 145, 250),
+                        stop:1 rgba(93, 100, 107, 250));
+                    border: 1px solid rgba(108, 117, 125, 200);
+                    transform: scale(1.05);
                 }
                 QPushButton:pressed {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                         stop:0 rgba(73, 80, 87, 220),
                         stop:1 rgba(52, 58, 64, 220));
+                    transform: scale(0.95);
+                }
+                QPushButton:focus {
+                    outline: 2px solid rgba(108, 117, 125, 200);
+                    outline-offset: 2px;
                 }
             """,
             "dialog_base": """
@@ -431,7 +514,7 @@ class StyleManager:
                 }
             """,
             "dialog_input": """
-                QLineEdit {
+                QLineEdit, QComboBox, QSpinBox {
                     border: 2px solid #dee2e6;
                     border-radius: 8px;
                     padding: 12px 16px;
@@ -441,12 +524,47 @@ class StyleManager:
                     selection-background-color: #007bff;
                     min-height: 20px;
                 }
-                QLineEdit:focus {
+                QLineEdit:focus, QComboBox:focus, QSpinBox:focus {
                     border-color: #007bff;
                     outline: none;
+                    background: #f8f9fa;
+                }
+                QLineEdit:hover, QComboBox:hover, QSpinBox:hover {
+                    border-color: #80bdff;
+                    background: #fcfcfc;
                 }
                 QLineEdit::placeholder {
                     color: #6c757d;
+                }
+                QComboBox::drop-down {
+                    border: none;
+                    width: 30px;
+                }
+                QComboBox::down-arrow {
+                    image: none;
+                    border: 2px solid #495057;
+                    width: 8px;
+                    height: 8px;
+                    border-top: none;
+                    border-right: none;
+                    transform: rotate(-45deg);
+                }
+                QComboBox QAbstractItemView {
+                    background: white;
+                    color: #495057;
+                    border: 1px solid #dee2e6;
+                    border-radius: 8px;
+                    selection-background-color: #007bff;
+                    padding: 4px;
+                }
+                QSpinBox::up-button, QSpinBox::down-button {
+                    background: #e9ecef;
+                    border: none;
+                    width: 20px;
+                    border-radius: 4px;
+                }
+                QSpinBox::up-button:hover, QSpinBox::down-button:hover {
+                    background: #007bff;
                 }
             """,
             "dialog_button": """
@@ -463,10 +581,16 @@ class StyleManager:
                 }
                 QPushButton:hover {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                        stop:0 #0056b3, stop:1 #004085);
+                        stop:0 #0088ff, stop:1 #007bff);
+                    transform: scale(1.02);
                 }
                 QPushButton:pressed {
-                    background: #004085;
+                    background: #0056b3;
+                    transform: scale(0.98);
+                }
+                QPushButton:focus {
+                    outline: 2px solid rgba(0, 123, 255, 200);
+                    outline-offset: 2px;
                 }
             """,
             "progress_bar": """
@@ -483,30 +607,35 @@ class StyleManager:
                 }
                 QProgressBar::chunk {
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                        stop:0 rgba(5, 150, 105, 220),
-                        stop:1 rgba(4, 120, 87, 220));
+                        stop:0 rgba(5, 150, 105, 240),
+                        stop:0.5 rgba(4, 135, 96, 240),
+                        stop:1 rgba(4, 120, 87, 240));
                     border-radius: 10px;
                     border: none;
                 }
                 QProgressBar[breakState="work"]::chunk {
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                        stop:0 rgba(5, 150, 105, 220),
-                        stop:1 rgba(4, 120, 87, 220));
+                        stop:0 rgba(5, 150, 105, 240),
+                        stop:0.5 rgba(4, 135, 96, 240),
+                        stop:1 rgba(4, 120, 87, 240));
                 }
                 QProgressBar[breakState="break"]::chunk {
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                        stop:0 rgba(217, 119, 6, 220),
-                        stop:1 rgba(180, 83, 9, 220));
+                        stop:0 rgba(217, 119, 6, 240),
+                        stop:0.5 rgba(198, 101, 7, 240),
+                        stop:1 rgba(180, 83, 9, 240));
                 }
                 QProgressBar[breakState="lunch"]::chunk {
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                        stop:0 rgba(37, 99, 235, 220),
-                        stop:1 rgba(29, 78, 216, 220));
+                        stop:0 rgba(37, 99, 235, 240),
+                        stop:0.5 rgba(33, 88, 225, 240),
+                        stop:1 rgba(29, 78, 216, 240));
                 }
                 QProgressBar[breakState="done"]::chunk {
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                        stop:0 rgba(124, 58, 237, 220),
-                        stop:1 rgba(109, 40, 217, 220));
+                        stop:0 rgba(124, 58, 237, 240),
+                        stop:0.5 rgba(116, 49, 227, 240),
+                        stop:1 rgba(109, 40, 217, 240));
                 }
             """,
             "status_colors": {
